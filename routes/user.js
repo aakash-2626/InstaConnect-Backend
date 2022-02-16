@@ -97,16 +97,22 @@ router.put("/updateimage", requireLogin, (req, res) => {
   );
 });
 
-router.post("/search-users", (req, res) => {
-  let userPattern = new RegExp(req.body.query, 'g');
-  User.find({ name: { $regex: userPattern } })
-    .select("_id name") 
-    .then((user) => {
-      res.json({ user });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+router.post("/search-users", async (req, res) => {
+  try {
+    const toSearch = req.body.query;
+    if (toSearch === '') {
+      return res.send({ user: [] })
+    }
+    
+    let userPattern = new RegExp('^' + toSearch);
+    let user = await User.find({
+      name: { $regex: userPattern, $options: "i" }
+    }).select("_id name");
+    
+    res.send({user});
+  } catch (err) {
+    res.status(422).send({ error: err })
+  }
 });
 
 module.exports = router;

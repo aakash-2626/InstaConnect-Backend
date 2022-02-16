@@ -95,7 +95,7 @@ router.post("/reset-password", (req, res) => {
             from: "no.reply.instaconnect@gmail.com",
             subject: "InstaConnect - Reset Password",
             html: `
-          <h2>Hi ${user.name},<h2><h3>Click <a href="http://localhost:3000/resetPassword/${token}">here</a> to reset your password.</h3><h4>This link is valid only for 1 hour.</h4>
+          <h2>Hi ${user.name},<h2><h3>Click <a href="${process.env.FRONTEND_LINK}/resetPassword/${token}">here</a> to reset your password.</h3><h4>This link is valid only for 1 hour.</h4>
           `,
           })
           return res.json({
